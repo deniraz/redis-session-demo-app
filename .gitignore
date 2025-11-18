@@ -1,0 +1,39 @@
+### Java ###
+*.class
+*.log
+*.lock
+
+### Maven ###
+target/
+.mvn/
+!.mvn/wrapper/maven-wrapper.jar
+
+### Spring ###
+HELP.md
+
+### IntelliJ ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### VS Code ###
+.vscode/
+
+### NetBeans ###
+nbproject/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+build/
+
+### OS Files ###
+.DS_Store
+Thumbs.db
+
+### Credentials ###
+*.pem
+*.key
+*.env
+application-local.yaml

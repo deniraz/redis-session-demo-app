@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title>Redis Session Demo</title>
+  <style>
+    body { 
+      font-family: Arial; 
+      text-align: center; 
+      margin-top: 40px; 
+    }
+    code { 
+      background: #f7f7f7; 
+      padding: 6px 12px; 
+      border-radius: 6px; 
+      font-size: 16px;
+      display: inline-block;
+    }
+    .box {
+      width: 550px;
+      margin: 25px auto;
+      padding: 20px;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      text-align: left;
+      background: #fafafa;
+    }
+    .highlight {
+      background: #d1ffd1;
+      padding: 5px;
+      border-radius: 4px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Redis Session Sharing Demo</h2>
+
+<div class="box">
+
+  <p><strong>Session ID:</strong></p>
+  <code th:text="${sessionId}"></code>
+
+  <p><strong>Served From Instance:</strong></p>
+  <code th:text="${host}"></code>
+
+  <p><strong>Redis Key:</strong></p>
+  <code th:text="${redisKey}"></code>
+
+  <p><strong>TTL (seconds):</strong></p>
+  <code th:text="${ttl}"></code>
+
+  <p><strong>Session Creation Time:</strong></p>
+  <code th:text="${#dates.format(creationTime, 'yyyy-MM-dd HH:mm:ss')}"></code>
+
+  <p><strong>Last Accessed Time:</strong></p>
+  <code th:text="${#dates.format(lastAccessedTime, 'yyyy-MM-dd HH:mm:ss')}"></code>
+
+</div>
+
+<!-- <h3 class="highlight">
+  Refresh beberapa kali.  
+  Instance berubah -> Session tetap sama.  
+  TTL tetap konsisten -> Session dari Redis.
+</h3> -->
+
+<p><a href="/logout">Logout</a></p>
+
+</body>
+</html>

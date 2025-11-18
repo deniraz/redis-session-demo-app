@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title>Home</title>
+  <style>
+    body { font-family: Arial; text-align: center; margin-top: 40px; }
+    code { background: #f0f0f0; padding: 4px 8px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+<h2>✅ Redis + RDS Session Demo</h2>
+<p>Session ID: <code th:text="${sessionId}">sid</code></p>
+<p>Instance Hostname: <code th:text="${host}">host</code></p>
+<p th:text="'Greeting: ' + ${greeting}"></p>
+<p><a href="/logout">Logout</a></p>
+</body>
+</html>

@@ -1,0 +1,51 @@
+server:
+  port: 8080
+
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:appdb}
+    username: ${DB_USER:appuser}
+    password: ${DB_PASS:password}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: 6379
+      ssl:
+        enabled: false
+
+  session:
+    # PENTING: Pakai Redis sebagai HttpSession store
+    store-type: redis
+    redis:
+      namespace: demo:session
+      # optional, tapi bagus buat demo
+      flush-mode: on_save
+
+management:
+  endpoint:
+    health:
+      show-details: always
+
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+  health:
+    # Supaya /actuator/health SELALU UP selama app nyala
+    # ALB cuma butuh HTTP 200, bukan cek Redis/DB.
+    redis:
+      enabled: false
+    db:
+      enabled: false
