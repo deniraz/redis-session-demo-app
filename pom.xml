@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Maven project definition for the Redis session login demo.
+  This POM wires together:
+    - Spring Boot Web + Security + JPA
+    - PostgreSQL driver
+    - Redis + Spring Session
+    - Actuator for health endpoints
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- Inherit Spring Boot's dependency management and defaults -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -12,71 +21,107 @@
         <relativePath/>
     </parent>
 
+    <!-- Project coordinates -->
     <groupId>com.example</groupId>
     <artifactId>redis-session-login</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
+        <!-- Java version used to compile the project -->
         <java.version>21</java.version>
     </properties>
 
     <dependencies>
 
-        <!-- SPRING MVC -->
+        <!--
+          Web starter:
+          - Spring MVC
+          - Embedded Tomcat
+          - JSON support
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- THYMELEAF -->
+        <!--
+          Thymeleaf view engine:
+          Used to render login.html and home.html.
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+
+        <!-- Extra integration between Thymeleaf and Spring Security -->
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity6</artifactId>
         </dependency>
 
-        <!-- SPRING SECURITY -->
+        <!--
+          Spring Security:
+          Handles authentication, authorization, and session handling.
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- DATABASE -->
+        <!--
+          Spring Data JPA:
+          Provides repository support (UserRepository) and entity management (UserEntity).
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+
+        <!-- PostgreSQL JDBC driver (used at runtime only) -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
 
-        <!-- REDIS & SESSION -->
+        <!--
+          Spring Data Redis:
+          Provides RedisConnectionFactory and RedisTemplate / StringRedisTemplate.
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+
+        <!--
+          Spring Session + Redis:
+          Replaces Tomcat's in-memory HttpSession with Redis-backed session storage.
+        -->
         <dependency>
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
         </dependency>
 
-        <!-- ACTUATOR -->
+        <!--
+          Spring Boot Actuator:
+          Exposes /actuator endpoints (health, info, etc.) for monitoring and ALB health checks.
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-        <!-- TESTING -->
+        <!--
+          Test dependencies:
+          - Spring Boot test support
+          - Spring Security test utilities
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
@@ -87,11 +132,20 @@
 
     <build>
         <plugins>
+
+            <!-- Spring Boot plugin:
+                 Enables 'mvn spring-boot:run' and repackages the JAR as an executable fat JAR.
+            -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
+            <!--
+              Surefire plugin:
+              Controls how tests are executed.
+              Here we skip tests during build to speed up packaging for demo.
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -100,6 +154,7 @@
                     <skipTests>true</skipTests>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 

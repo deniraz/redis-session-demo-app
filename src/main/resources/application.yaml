@@ -1,51 +1,76 @@
 server:
   port: 8080
+  # The application listens on port 8080 (default for Spring Boot web apps).
 
 spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+      # Ensures older Spring MVC path matching behavior (needed for some libraries).
 
   datasource:
+    # Database connection using environment variables.
+    # If environment variables are not provided, fallback defaults are used.
     url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:appdb}
     username: ${DB_USER:appuser}
     password: ${DB_PASS:password}
     driver-class-name: org.postgresql.Driver
+    # This config allows the app to run both locally and in AWS EC2.
 
   jpa:
     hibernate:
       ddl-auto: update
+      # Automatically updates the DB schema based on JPA entities.
+      # Very convenient for demos, not recommended for production.
     show-sql: false
+    # SQL logging disabled for cleaner console output.
 
   data:
     redis:
+      # Redis connection settings.
+      # Uses environment variable REDIS_HOST if provided.
       host: ${REDIS_HOST:localhost}
       port: 6379
       ssl:
         enabled: false
+      # If ElastiCache Redis with TLS is used, this can be set to true.
 
   session:
-    # PENTING: Pakai Redis sebagai HttpSession store
+    # CRITICAL: Enables Spring Session to use Redis for HTTP session storage.
     store-type: redis
+
     redis:
       namespace: demo:session
-      # optional, tapi bagus buat demo
+      # Adds a namespace prefix to all Redis keys used by Spring Session.
+      # Example:
+      #   demo:session:sessions:<sessionId>
+
       flush-mode: on_save
+      # When flush-mode = on_save:
+      # - Session data is written to Redis only when the session is saved.
+      # This reduces Redis writes and is preferred for demos.
 
 management:
   endpoint:
     health:
       show-details: always
+      # Makes /actuator/health show full details.
 
   endpoints:
     web:
       exposure:
         include: "*"
+        # Exposes all actuator endpoints over HTTP.
+        # Very helpful for debugging and demos.
 
   health:
-    # Supaya /actuator/health SELALU UP selama app nyala
-    # ALB cuma butuh HTTP 200, bukan cek Redis/DB.
+    # These settings weaken health checks to avoid false “DOWN” during demos.
+    # The ALB only needs HTTP 200 — not DB or Redis health.
+
     redis:
       enabled: false
+      # Disables Redis health check — avoids showing DOWN if Redis is restarting.
+
     db:
       enabled: false
+      # Disables DB health check — avoids failures during startup or migrations.

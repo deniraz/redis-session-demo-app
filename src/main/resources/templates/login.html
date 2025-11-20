@@ -1,15 +1,38 @@
-<!doctype html>
+<!doctype html> 
 <html>
 <head>
   <meta charset="UTF-8"/>
   <title>Login</title>
+  <!-- This page is a simple login form rendered by Spring MVC.
+       The form submits a POST request to /login,
+       which is automatically handled by Spring Security’s authentication filter. -->
 </head>
+
 <body>
+
 <h2>Login</h2>
+
+<!-- 
+  This form sends credentials using POST to /login.
+  Spring Security intercepts this endpoint automatically:
+    - Validates username & password
+    - Loads the user through JpaUserDetailsService
+    - Creates a Redis-backed session if authentication succeeds
+-->
 <form method="post" action="/login">
-  <label>Username:</label><input name="username" value="demo"/><br>
-  <label>Password:</label><input name="password" type="password" value="password"/><br>
+
+  <!-- Username input (default filled with 'demo' for convenience in the demo) -->
+  <label>Username:</label>
+  <input name="username" value="demo"/><br>
+
+  <!-- Password input (masked, default 'password') -->
+  <label>Password:</label>
+  <input name="password" type="password" value="password"/><br>
+
+  <!-- Submit button -->
   <button type="submit">Login</button>
+
 </form>
+
 </body>
 </html>
